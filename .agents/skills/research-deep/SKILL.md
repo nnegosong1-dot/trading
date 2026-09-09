@@ -22,6 +22,9 @@ description: Execute the approved structured research outline item-by-item using
 11. Save one JSON per item under `results/`.
 12. Validate field coverage before treating an item as complete.
 
+## Research agent
+Use the repository's `agents-codex/web-researcher.toml` configuration for the independent web-research worker. For steel/customs tasks, route through `agents-codex/web-search-modules/steel-trade.md`.
+
 ## Shen Heng prioritization
 For market development research, prioritize evidence that answers: Can Shen Heng sell this product into this market, who is buying it, who supplies it now, what products/specifications are involved, and what regulatory or price barriers could prevent a deal?
 
@@ -40,6 +43,13 @@ Each item JSON should follow `fields.yaml`, use English field values for machine
 {"uncertain": []}
 ```
 where unresolved fields are explicitly listed.
+
+## Validation
+After generating each result, run:
+```bash
+python .agents/skills/research-deep/scripts/validate_json.py -f <topic_slug>/fields.yaml -j <topic_slug>/results/<item>.json
+```
+Only treat the item as complete when validation passes.
 
 ## Resume behavior
 A valid completed JSON should be skipped on subsequent runs unless the user requests refresh/recheck. If a file exists but fails validation or contains material uncertainty requiring recheck, research it again.
